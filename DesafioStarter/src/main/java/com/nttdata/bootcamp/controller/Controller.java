@@ -15,7 +15,7 @@ import starter.TemperatureService;
 @RestController
 public class Controller {
 	
-private final static Logger logger= LoggerFactory.getLogger(Controller.class);
+	private final static Logger logger= LoggerFactory.getLogger(Controller.class);
 	
 	private Counter counterConsulta;
 	private Counter counterConversion;
@@ -23,9 +23,6 @@ private final static Logger logger= LoggerFactory.getLogger(Controller.class);
 	@Autowired
 	private TemperatureService service;
 	
-	public Controller() {
-		
-	}
 	
 	public Controller(MeterRegistry registry) {
 		this.counterConsulta = Counter.builder("invocaciones.consulta").description("Invocaciones totales").register(registry);
@@ -34,11 +31,15 @@ private final static Logger logger= LoggerFactory.getLogger(Controller.class);
 	
 	@GetMapping("/consulta")
 	public ResponseEntity<String> consulta() {
+		logger.info("CONSULTA");
+		counterConsulta.increment();
 		return new ResponseEntity<String>(HttpStatus.OK).ok(service.consulta());
 	}
 	
 	@GetMapping("/conversor")
 	public ResponseEntity<String> conversor() {
+		logger.info("CONVERSOR");
+		counterConversion.increment();
 		return new ResponseEntity<String>(HttpStatus.OK).ok(service.conversor(10));
 	}
 
